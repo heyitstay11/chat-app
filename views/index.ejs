@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat app</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <script defer src="/js/socket.io.min.js"></script>
+    <script defer src="/js/script.js"></script>
+</head>
+<body>
+    <header>
+        <a href="#main-content" class="skip-link">Skip To Content</a>
+        <div class="wrapper">
+            <div>
+                <span class="brand">Chat App</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#join">Join</a></li>
+                    <li><a href="#chat">Chat</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main" id="main-content">
+        <div class="join" id="join">
+            <p class="title">Join a Room<p>
+            <form id="room-form">
+                <label for="name">Username:</label>
+                <input placeholder="John123" type="text" name="name" required id="name">
+                <label for="room">Room:</label>
+                <input placeholder="Football" type="text" name="room" required id="room">
+                <button class="button">Submit</button>
+            </form>
+        </div>
+        <div id="chat" class="chat">
+            <p class="title" id="room-title">No Room Joined<p>
+            <div class="chat-wrapper">
+                <div id="chatbox" class="chatbox">
+                    <div>
+                        <span class="author">admin</span>
+                        <span class="msg">You are connected</span>
+                    </div>
+                    <div class="self">
+                        <span class="author">star4444</span>
+                        <span class="msg">Hey</span>
+                    </div>
+                    <div class="">
+                        <span class="author">john123</span>
+                        <span class="msg">Lorem ipsum dolor sit</span>
+                    </div>
+                </div>
+                <form id="message-form">
+                    <label for="message">Message:</label>
+                    <div class="wrapper">
+                        <textarea name="message" id="inputmessage" rows="1"></textarea>
+                        <button id="send" class="button">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="home" class="home">
+            <h1>Chat App</h1>
+            <p>Create a chat session using a username and group name</p>
+            <a href="#join" class="button">Create/Join</a>
+        </div>
+    </main>
+</body>
+</html>
