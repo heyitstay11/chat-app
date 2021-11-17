@@ -40,11 +40,12 @@ const editMessage = (user, text, id='no_id_given') => {
 
 
 const addMessage = (user, text, id='', test = false) => {
+    if(!text) return
     const message =
     `<div id="${id}" ondblclick="setEditMode('${user}', '${id}')" 
       class="${(user === username || test) ? 'self': '' }">
         <span class="author">${user}</span>
-        <span class="msg">${text}</span>
+        <span class="msg">${text.toString()}</span>
     </div>`;
 
     chatBox.innerHTML +=  message;

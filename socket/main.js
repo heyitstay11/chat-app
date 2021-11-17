@@ -1,5 +1,12 @@
 const {addUser, removeUser} = require('./users');
 const { nanoid } = require('nanoid');
+const sanitizeHtml = require('sanitize-html');
+const clean = (dirty) => sanitizeHtml(dirty, {
+    allowedTags: [ 'b', 'i', 'em' , 'strong', 'a'],
+    allowedAttributes: {
+        'a': [ 'href' ]
+    },
+});
 
 const startSocket = (io) => {
 
@@ -7,11 +14,12 @@ const startSocket = (io) => {
         console.log('New Connection');
         
         socket.on('join', ({name, room}, callback) => {
-
-            const {user, error} = addUser({id:socket.id, name, room});
+            const username = clean(name);
+            const userroom = clean(room);
+            const {user, error} = addUser({id:socket.id, name: username, room: userroom});
             if(error) return callback({error});
 
-            callback({status: 'joined', user});
+            callback({status: 'joined', user: user});
 
             socket.emit('message', {user: 'admin', text: `${user.name}, welcome to the room ${user.room}`});
             socket.broadcast.to(user.room).emit('message',  {user: 'admin', text: `${user.name}, has joned` });
@@ -19,12 +27,19 @@ const startSocket = (io) => {
         });
 
         socket.on('newMessage', ({username, room, text}, callback) => {
-            io.to(room).emit("message", {user: username, text, id: `socky-${nanoid(7)}`});
+            const user = clean(username);
+            const userroom = clean(room);
+            const message = clean(text);
+            console.log(message);
+            io.to(userroom).emit("message", {user, text: message, id: `socky-${nanoid(7)}`});
             callback();
         });
 
         socket.on('newEditMessage', ({username, room, text, id}, callback) => {
-            io.to(room).emit("editMessage", {user: username, text, id});
+            const user = clean(username);
+            const userroom = clean(room);
+            const message = clean(text);
+            io.to(userroom).emit("editMessage", {user, text: message, id});
             callback();
         });
 

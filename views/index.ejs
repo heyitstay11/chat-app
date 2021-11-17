@@ -10,7 +10,8 @@
     <script defer src="/js/script.js"></script>
 </head>
 <body>
-    <header>
+
+    <header role="banner">
         <a href="#main-content" class="skip-link">Skip To Content</a>
         <div class="wrapper">
             <div>
@@ -27,7 +28,7 @@
     </header>
 
     <main class="main" id="main-content">
-        <div class="join" id="join">
+        <section class="join" id="join">
             <p class="title">Join a Room<p>
             <form id="room-form">
                 <label for="name">Username:</label>
@@ -36,8 +37,8 @@
                 <input placeholder="Football" type="text" name="room" required id="room">
                 <button class="button">Submit</button>
             </form>
-        </div>
-        <div id="chat" class="chat">
+        </section>
+        <section id="chat" class="chat">
             <p class="title" id="room-title">No Room Joined<p>
             <div class="chat-wrapper">
                 <button class="leave button" id="leave">Leave</button>
@@ -60,16 +61,16 @@
                     <div class="wrapper">
                         <textarea name="message" id="inputmessage" rows="1"></textarea>
                         <button type="submit" id="send" class="button">Send</button>
-                        <button type="button" id="delete" class="button">Delete</button>
+                        <button type="button" aria-label="Delete the current message" id="delete" class="button">Delete</button>
                     </div>
                 </form>
             </div>
-        </div>
-        <div id="home" class="home">
+        </section>
+        <section id="home" class="home">
             <h1>Chat App</h1>
             <p>Create a chat session using a username and group name</p>
-            <a href="#join" class="button">Create/Join</a>
-        </div>
+            <a href="#join" aria-label="Visit the Join/Chat page of site" class="button">Create/Join</a>
+        </section>
     </main>
 </body>
 </html>
