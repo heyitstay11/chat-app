@@ -100,7 +100,7 @@ nav ul a:hover {
 .join .title, .chat .title {
   text-align: center;
   font-size: 1.8rem;
-  margin: .5em auto;
+  margin: .8em auto;
 }
 
 .join form, .chat form, .chatbox {
@@ -196,6 +196,32 @@ form input {
 
 .chat form #delete {
   display: none;
+}
+
+.chat-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.chat-wrapper .leave {
+  opacity: 0.75;
+  display: none;
+  position: absolute;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  top: 0;
+  left: 0;
+  margin-top: -20px;
+  margin-left: .5em;
+  background-color: tomato;
+  color: white;
+  border: 3px solid #7a0000;
+}
+
+.chat-wrapper .leave:hover {
+  background-color: #db2100;
 }
 
 .chatbox {

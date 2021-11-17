@@ -4,6 +4,7 @@ let EDIT_MODE = false, EDIT_ID = '';
 const roomForm = document.getElementById('room-form');
 const messageForm = document.getElementById('message-form');
 const chatBox = document.querySelector('#chatbox');
+const leaveButton = document.getElementById('leave');
 
 
 const UpdateUser = (user) => {
@@ -49,6 +50,7 @@ const addMessage = (user, text, id='', test = false) => {
     chatBox.innerHTML +=  message;
     chatBox.scrollTop = chatBox.scrollHeight;
 }
+
 
 const deleteMessage = (id) => {
     let messageEl = document.getElementById(id);
@@ -111,6 +113,7 @@ roomForm.addEventListener('submit', (e) => {
         }
         if(cb.status === 'joined'){
             UpdateUser(cb.user);
+            leaveButton.style.display = 'block';
         }
     });
 });
@@ -141,3 +144,8 @@ messageForm.delete.addEventListener('click', (e) => {
         return messageForm.send.innerText = 'Send';
     });
 });
+
+
+leaveButton.addEventListener('click', () => {
+    window.location = '/';
+})
