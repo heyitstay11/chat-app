@@ -24,10 +24,14 @@ const startSocket = (io) => {
         });
 
         socket.on('newEditMessage', ({username, room, text, id}, callback) => {
-            console.log('Edit', id);
             io.to(room).emit("editMessage", {user: username, text, id});
             callback();
         });
+
+        socket.on('sendDelete', ({id, room}, callback) => {
+            io.to(room).emit('deleteMessage', {id});
+            callback();
+        })
 
         socket.on('disconnect', () => {
             let user = removeUser(socket.id);

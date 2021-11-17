@@ -23,6 +23,7 @@ const setEditMode = (user, id) => {
         EDIT_ID = id;
         messageForm.send.innerText = 'Edit';
         messageForm.inputmessage.value = text.innerText;
+        messageForm.delete.style.display = 'block';
     }
 }
 
@@ -32,8 +33,8 @@ const editMessage = (user, text, id='no_id_given') => {
     if(messageEl){
         let textEl = messageEl.querySelector('.msg');
         textEl.innerText =  text;
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
-    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 
@@ -47,6 +48,14 @@ const addMessage = (user, text, id='', test = false) => {
 
     chatBox.innerHTML +=  message;
     chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+const deleteMessage = (id) => {
+    let messageEl = document.getElementById(id);
+    if(messageEl){
+        messageEl.remove();
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
 }
 
 
@@ -64,6 +73,7 @@ const sendMessageToSocket = () => {
             }
         });
         EDIT_ID = '', EDIT_MODE = false;
+        messageForm.delete.style.display = 'none';
         return messageForm.send.innerText = 'Send';
     }
     socket.emit('newMessage', {username, room, text}, (cb) => {
@@ -74,14 +84,20 @@ const sendMessageToSocket = () => {
 }
 
 
-
 socket.on('message', ({ user, text, id }) => {
    addMessage(user, text, id);
 });
 
+
 socket.on('editMessage', ({user, text, id}) => {
     editMessage(user, text, id);
-})
+});
+
+
+socket.on('deleteMessage', ({id}) => {
+    deleteMessage(id);
+});
+
 
 roomForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -100,19 +116,28 @@ roomForm.addEventListener('submit', (e) => {
 });
 
 
+messageForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    sendMessageToSocket();
+});
+
+
 messageForm.inputmessage.addEventListener('keypress', (e) => {
     if(e.key === 'Enter' && e.shiftKey === false){
         e.preventDefault();
         sendMessageToSocket();
     }
-})
+});
 
-
-messageForm.addEventListener('submit', (e) => {
+messageForm.delete.addEventListener('click', (e) => {
     e.preventDefault();
-    sendMessageToSocket();
-})
-
-
-
-
+    socket.emit('sendDelete', {id: EDIT_ID, room}, (cb) => {
+        if(cb && cb.error){
+            return console.log(cb.error);
+        }
+        EDIT_ID = '', EDIT_MODE = false;
+        messageForm.delete.style.display = 'none';
+        messageForm.inputmessage.value = '';
+        return messageForm.send.innerText = 'Send';
+    });
+});
