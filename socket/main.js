@@ -1,4 +1,4 @@
-const {addUser, removeUser} = require('./users');
+const {addUser, removeUser, getUserInRoom} = require('./users');
 const { nanoid } = require('nanoid');
 const sanitizeHtml = require('sanitize-html');
 const clean = (dirty) => sanitizeHtml(dirty, {
@@ -24,13 +24,14 @@ const startSocket = (io) => {
             socket.emit('message', {user: 'admin', text: `${user.name}, welcome to the room ${user.room}`});
             socket.broadcast.to(user.room).emit('message',  {user: 'admin', text: `${user.name}, has joned` });
             socket.join(user.room);
+            io.to(userroom).emit('pInfo', {users: getUserInRoom(userroom)});
         });
 
         socket.on('newMessage', ({username, room, text}, callback) => {
             const user = clean(username);
             const userroom = clean(room);
             const message = clean(text);
-            console.log(message);
+            
             io.to(userroom).emit("message", {user, text: message, id: `socky-${nanoid(7)}`});
             callback();
         });
@@ -52,6 +53,7 @@ const startSocket = (io) => {
             let user = removeUser(socket.id);
             if(user){
                 io.to(user.room).emit("message", {user: 'admin', text: `${user.name} has left the room`});
+                io.to(user.room).emit('pInfo', {users: getUserInRoom(user.room)});
             }
         })
     });

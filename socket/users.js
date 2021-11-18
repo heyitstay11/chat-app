@@ -7,7 +7,7 @@ const addUser = ({id, name, room}) => {
     const existingUser = users.find((user) => user.room === room && user.name === name);
     
     if(existingUser || name == 'admin' || !username || !userroom){
-        return { error : 'Username has already taken', user: null};
+        return { error : 'Username has already taken', user: null };
     }
 
     const user = { id, name: username, room: userroom };
@@ -25,7 +25,14 @@ const removeUser = (id) => {
 
 const getUser = (id) => users.find((user) => user.id === id);
 
-const getUserInRoom = (room) => users.filter((user) => user.room === room);
+const getUserInRoom = (room) => {
+    let roomUsers = users.map(user => {
+        if(user.room === room){
+            return user.name;
+        }
+    });
+    return roomUsers;
+};
 
 module.exports ={
     addUser,

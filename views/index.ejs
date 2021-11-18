@@ -7,7 +7,7 @@
     <title>Chat app</title>
     <link rel="stylesheet" href="/css/main.css">
     <script defer src="/js/socket.io.min.js"></script>
-    <script defer src="/js/script.js"></script>
+    <script defer src="/js/buildscript.js"></script>
 </head>
 <body>
 
@@ -39,36 +39,47 @@
             </form>
         </section>
         <section id="chat" class="chat">
-            <p class="title" id="room-title">No Room Joined<p>
-            <div class="chat-wrapper">
-                <button class="leave button" id="leave">Leave</button>
-                <div id="chatbox" class="chatbox">
-                    <div>
-                        <span class="author">admin</span>
-                        <span class="msg">You are connected</span>
-                    </div>
-                    <div class="self">
-                        <span class="author">star4444</span>
-                        <span class="msg">Hey</span>
-                    </div>
-                    <div class="">
-                        <span class="author">john123</span>
-                        <span class="msg">Lorem ipsum dolor sit</span>
+            <div class="chat_wrapper">
+                <div class="left" id="p-list">
+                    <p class="title">Participants: <span id="total-p" >1</span></p>
+                    <ul id="p-list-inner">
+                        <li>star444</li>
+                    </ul>
+                </div>
+                <div class="right">
+                    <p class="title" id="room-title">No Room Joined<p>
+                    <div class="chat-wrapper">
+                        <button class="leave button" id="leave">Leave</button>
+                        <button class="list button" id="list">List</button>
+                        <div id="chatbox" class="chatbox">
+                            <div>
+                                <span class="author">admin</span>
+                                <span class="msg">You are connected</span>
+                            </div>
+                            <div class="self">
+                                <span class="author">star4444</span>
+                                <span class="msg">Hey</span>
+                            </div>
+                            <div class="">
+                                <span class="author">john123</span>
+                                <span class="msg">Lorem ipsum dolor sit</span>
+                            </div>
+                        </div>
+                        <form id="message-form">
+                            <label for="message">Message:</label>
+                            <div class="wrapper">
+                                <textarea name="message" id="inputmessage" rows="1"></textarea>
+                                <button type="submit" id="send" class="button">Send</button>
+                                <button type="button" aria-label="Delete the current message" id="delete" class="button">Del</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <form id="message-form">
-                    <label for="message">Message:</label>
-                    <div class="wrapper">
-                        <textarea name="message" id="inputmessage" rows="1"></textarea>
-                        <button type="submit" id="send" class="button">Send</button>
-                        <button type="button" aria-label="Delete the current message" id="delete" class="button">Delete</button>
-                    </div>
-                </form>
             </div>
         </section>
         <section id="home" class="home">
             <h1>Chat App</h1>
-            <p>Create a chat session using a username and group name</p>
+            <p>Create a chat session using a username and room name</p>
             <a href="#join" aria-label="Visit the Join/Chat page of site" class="button">Create/Join</a>
         </section>
     </main>

@@ -5,6 +5,7 @@ const roomForm = document.getElementById('room-form');
 const messageForm = document.getElementById('message-form');
 const chatBox = document.querySelector('#chatbox');
 const leaveButton = document.getElementById('leave');
+const listButton = document.getElementById('list');
 
 
 const UpdateUser = (user) => {
@@ -13,6 +14,19 @@ const UpdateUser = (user) => {
     document.getElementById('room-title').innerText = `Room ~ ${room}`;
     window.location.hash = 'chat';
     chatBox.innerHTML = '';
+}
+
+
+const updateList = (users) => {
+    document.getElementById('total-p').innerText = users.length;
+    const pList = document.getElementById('p-list-inner');
+    const newList = document.createElement('ul');
+    users.forEach(user => {
+        let li = document.createElement('li');
+        li.innerText = user;
+        newList.appendChild(li);
+    });
+    pList.innerHTML = newList.innerHTML;
 }
 
 
@@ -41,14 +55,18 @@ const editMessage = (user, text, id='no_id_given') => {
 
 const addMessage = (user, text, id='', test = false) => {
     if(!text) return
+    let wrapDiv = document.createElement('div');
+    wrapDiv.id = id;
+    wrapDiv.addEventListener('dblclick', () => setEditMode(user, id));
+    if(user === username || test){
+        wrapDiv.classList.add('self');
+    }
     const message =
-    `<div id="${id}" ondblclick="setEditMode('${user}', '${id}')" 
-      class="${(user === username || test) ? 'self': '' }">
-        <span class="author">${user}</span>
-        <span class="msg">${text.toString()}</span>
-    </div>`;
+    `<span class="author">${user}</span>
+    <span class="msg">${text.toString()}</span>`;
+    wrapDiv.innerHTML = message;
 
-    chatBox.innerHTML +=  message;
+    chatBox.appendChild(wrapDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
@@ -101,6 +119,9 @@ socket.on('deleteMessage', ({id}) => {
     deleteMessage(id);
 });
 
+socket.on('pInfo', ({users}) => {
+    updateList(users);
+});
 
 roomForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -113,8 +134,10 @@ roomForm.addEventListener('submit', (e) => {
             return console.log(cb.error);
         }
         if(cb.status === 'joined'){
-            UpdateUser(cb.user);
             leaveButton.style.display = 'block';
+            listButton.classList.add('active');
+            document.getElementById('p-list').classList.add('active');
+            UpdateUser(cb.user);
         }
     });
 });
@@ -133,6 +156,7 @@ messageForm.inputmessage.addEventListener('keypress', (e) => {
     }
 });
 
+
 messageForm.delete.addEventListener('click', (e) => {
     e.preventDefault();
     socket.emit('sendDelete', {id: EDIT_ID, room}, (cb) => {
@@ -149,4 +173,8 @@ messageForm.delete.addEventListener('click', (e) => {
 
 leaveButton.addEventListener('click', () => {
     window.location = '/';
+})
+
+listButton.addEventListener('click', () => {
+    document.getElementById('p-list').classList.toggle('visible');
 })
