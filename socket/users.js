@@ -23,8 +23,6 @@ const removeUser = (id) => {
     }
 }
 
-const getUser = (id) => users.find((user) => user.id === id);
-
 const getUserInRoom = (room) => {
     let roomUsers = users.map(user => {
         if(user.room === room){
@@ -37,6 +35,5 @@ const getUserInRoom = (room) => {
 module.exports ={
     addUser,
     removeUser,
-    getUser,
     getUserInRoom,
 }

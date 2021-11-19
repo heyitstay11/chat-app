@@ -1,6 +1,7 @@
 const {addUser, removeUser, getUserInRoom} = require('./users');
 const { nanoid } = require('nanoid');
 const sanitizeHtml = require('sanitize-html');
+const { emojify } = require('node-emoji');
 const clean = (dirty) => sanitizeHtml(dirty, {
     allowedTags: [ 'b', 'i', 'em' , 'strong', 'a'],
     allowedAttributes: {
@@ -30,7 +31,7 @@ const startSocket = (io) => {
         socket.on('newMessage', ({username, room, text}, callback) => {
             const user = username;
             const userroom = room;
-            const message = clean(text);
+            const message = emojify(clean(text));
             
             io.to(userroom).emit("message", {user, text: message, id: `socky-${nanoid(7)}`});
             callback();
@@ -39,7 +40,8 @@ const startSocket = (io) => {
         socket.on('newEditMessage', ({username, room, text, id}, callback) => {
             const user = username;
             const userroom = room;
-            const message = clean(text);
+            const message = emojify(clean(text));
+            
             io.to(userroom).emit("editMessage", {user, text: message, id});
             callback();
         });
