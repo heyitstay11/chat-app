@@ -31,10 +31,11 @@
         <section class="join" id="join">
             <p class="title">Join a Room<p>
             <form id="room-form">
-                <label for="name">Username:</label>
-                <input placeholder="John123" type="text" name="name" required id="name">
-                <label for="room">Room:</label>
-                <input placeholder="Football" type="text" name="room" required id="room">
+                <span class="hint"> <span class="star">*</span> required and at least 4 characters long</span>
+                <label for="name">Username <span class="star">*</span></label>
+                <input placeholder="John123" type="text" pattern="[a-zA-Z0-9]{4,12}" title="no special characters allowed, length between 4 to 12 characters" required id="name" name="name" minlength="4" maxlength="12" >
+                <label for="room">Room <span class="star">*</span></label>
+                <input placeholder="Football" type="text" pattern="[a-zA-Z0-9]{4,12}"  title="no special characters allowed, length between 4 to 12 characters" required id="room" name="room" maxlength="12">
                 <button class="button">Submit</button>
             </form>
         </section>

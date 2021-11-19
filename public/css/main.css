@@ -131,6 +131,23 @@ form input {
   padding-left: .5em;
 }
 
+form input:valid {
+  border: 2px solid black;
+}
+
+.join .hint {
+  font-size: .9rem;
+  line-height: 1.6;
+  margin-left: 1em;
+}
+
+.join .star {
+  color: red;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-right: .25em;
+}
+
 .join form > label ~ label {
   margin-top: 1em;
 }
@@ -284,7 +301,7 @@ form input {
 .chatbox div span.msg {
   font-size: 1.2rem;
   max-width: 84%;
-  word-break: break-all;
+  word-break: break-word;
   overflow-wrap: break-word;
   -webkit-hyphens: auto;
       -ms-hyphens: auto;

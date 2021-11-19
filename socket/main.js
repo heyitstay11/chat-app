@@ -28,8 +28,8 @@ const startSocket = (io) => {
         });
 
         socket.on('newMessage', ({username, room, text}, callback) => {
-            const user = clean(username);
-            const userroom = clean(room);
+            const user = username;
+            const userroom = room;
             const message = clean(text);
             
             io.to(userroom).emit("message", {user, text: message, id: `socky-${nanoid(7)}`});
@@ -37,8 +37,8 @@ const startSocket = (io) => {
         });
 
         socket.on('newEditMessage', ({username, room, text, id}, callback) => {
-            const user = clean(username);
-            const userroom = clean(room);
+            const user = username;
+            const userroom = room;
             const message = clean(text);
             io.to(userroom).emit("editMessage", {user, text: message, id});
             callback();
