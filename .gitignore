@@ -2,3 +2,4 @@ node_modules
 **/**.scss
 **/**.css.map
 **/socket.io.js
+preact-chat-app

@@ -10,7 +10,10 @@ const server = http.createServer(app);
 
 const { Server } = require('socket.io');
 const io = new Server(server, {
-    serveClient: false
+    serveClient: false,
+    cors: {
+        origin: '*',
+    }
 });
 
 app.set('view engine', 'ejs');
