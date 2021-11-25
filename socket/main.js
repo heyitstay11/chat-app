@@ -2,6 +2,7 @@ const {addUser, removeUser, getUserInRoom} = require('./users');
 const { nanoid } = require('nanoid');
 const sanitizeHtml = require('sanitize-html');
 const { emojify } = require('node-emoji');
+const { addMessageToHistory, getAllMessageInRoom } = require('./history');
 const clean = (dirty) => sanitizeHtml(dirty, {
     allowedTags: [ 'b', 'i', 'em' , 'strong', 'a'],
     allowedAttributes: {
@@ -21,19 +22,24 @@ const startSocket = (io) => {
             if(error) return callback({error});
 
             callback({status: 'joined', user: user});
+            const users = getUserInRoom(userroom);
+            if(users.length > 1){
+                socket.emit('chatHistory', {messages: getAllMessageInRoom(user.room)});
+            }
 
             socket.emit('message', {user: 'admin', text: `${user.name}, welcome to room ${user.room}`});
             socket.broadcast.to(user.room).emit('message',  {user: 'admin', text: `${user.name}, has joined` });
             socket.join(user.room);
-            io.to(userroom).emit('pInfo', {users: getUserInRoom(userroom)});
+            io.to(userroom).emit('pInfo', { users: users });
         });
 
         socket.on('newMessage', ({username, room, text}, callback) => {
             const user = username;
             const userroom = room;
             const message = emojify(clean(text));
-            
-            io.to(userroom).emit("message", {user, text: message, id: `socky-${nanoid(7)}`});
+            const id =  `socky-${nanoid(7)}`;
+            addMessageToHistory({user, room, text: message, id});
+            io.to(userroom).emit("message", {user, text: message, id});
             callback();
         });
 

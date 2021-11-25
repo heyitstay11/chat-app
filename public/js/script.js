@@ -123,6 +123,14 @@ socket.on('pInfo', ({users}) => {
     updateList(users);
 });
 
+socket.on('chatHistory', ({ messages }) => {
+    if(messages.length <= 0) return;
+    messages.forEach(({id, text, user}) => {
+        addMessage(user, text, id);
+    });
+    chatBox.innerHTML += `<p style='text-align:center;margin: 10px auto'>Chat History</p>`
+});
+
 roomForm.addEventListener('submit', (e) => {
     e.preventDefault();
     if(room !== '') return window.location.hash = 'chat';

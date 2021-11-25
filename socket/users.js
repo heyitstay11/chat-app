@@ -1,4 +1,13 @@
+const { addUserToHistory, removeUserFromHistory } = require("./history");
+
 const users = [];
+/*
+    user = {
+        id
+        name
+        room
+    }
+*/
 
 const addUser = ({id, name, room}) => {
     let username = name.trim();
@@ -12,6 +21,7 @@ const addUser = ({id, name, room}) => {
 
     const user = { id, name: username, room: userroom };
     users.push(user);
+    addUserToHistory({user: username, room: userroom});
     return { user: user, error : false};
 }
 
@@ -19,7 +29,9 @@ const removeUser = (id) => {
     const index = users.findIndex((user) => user.id === id);
 
     if(index !== -1){
-        return users.splice(index, 1)[0];
+        const deletedUser =  users.splice(index, 1)[0];
+        removeUserFromHistory({ user: deletedUser.name, room: deletedUser.room })
+        return deletedUser
     }
 }
 
@@ -32,7 +44,7 @@ const getUserInRoom = (room) => {
     return roomUsers;
 };
 
-module.exports ={
+module.exports = {
     addUser,
     removeUser,
     getUserInRoom,
