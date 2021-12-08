@@ -3,3 +3,4 @@ node_modules
 **/**.css.map
 **/socket.io.js
 preact-chat-app
+.env
