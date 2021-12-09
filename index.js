@@ -4,6 +4,8 @@ const path = require('path');
 const cors = require('cors');
 const { connectDB } = require('./middlewares/connectDB');
 const authRoutes =  require('./routes/auth');
+const userRoutes = require('./routes/user');
+const channelRoutes = require('./routes/channel');
 const cookieParser = require('cookie-parser');
 const startSocket = require('./socket/main');
 const app = express();
@@ -61,6 +63,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
+app.use('/channel', channelRoutes);
 
 
 server.listen(PORT, () => console.log(`Server up at http://localhost:${PORT}`));

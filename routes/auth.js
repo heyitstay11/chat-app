@@ -28,7 +28,7 @@ router.post('/signup', async (req, res) => {
         }); 
 
        res.cookie('p_chat_refresh', refreshToken, COOKIE_OPTIONS);
-       res.status(201).json({ token: jwtToken, email: user.email });
+       res.status(201).json({ token: jwtToken, email: user.email, id: user._id  });
    } catch (error) {
        res.status(500).json({error});
    }
@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
          }); 
  
         res.cookie('p_chat_refresh', refreshToken, COOKIE_OPTIONS);
-        res.status(201).json({ token: jwtToken, email: user.email });
+        res.status(201).json({ token: jwtToken, email: user.email, id: user._id  });
     } catch (error) {
         if(error.message){
             error = error.message;
@@ -59,23 +59,23 @@ router.post('/login', async (req, res) => {
 
 router.post('/logout', requireAuth , async (req, res) => {
     const { signedCookies = {} } = req;
-    const { refreshToken } = signedCookies;
+    const {  p_chat_refresh } = signedCookies;
 
     try {
         const user = await User.findById(req.user?.id);
         if(!user) return res.status(401).json({message: "No User Found"});
 
-        const tokenIndex = user.refreshToken.findIndex(token => token.refreshToken === refreshToken);
-        console.log(refreshToken);
+        const tokenIndex = user.refreshToken.findIndex(token => token.refreshToken === p_chat_refresh);
+
         if(tokenIndex !== -1){
 
             await User.updateOne(
                { _id: user._id},
-               { $pull: { refreshToken: { refreshToken: refreshToken}}}
+               { $pull: { refreshToken: { refreshToken: p_chat_refresh}}}
            );
     
            res.cookie("p_chat_refresh", '',{ ...COOKIE_OPTIONS, maxAge: 1});
-           res.json({ success: true , id : user._id})
+           res.json({ token: '' , email : user.email, id: user._id })
         }else{
             console.log('error')
             return res.status(401).json({message: "Invalid Token"});
@@ -112,7 +112,7 @@ router.post('/refresh', async (req, res) => {
         await user.save(); // Saving the user with updated refreshToken
 
         res.cookie('p_chat_refresh', newRefreshToken, COOKIE_OPTIONS);
-        res.json({token: jwtToken, email: user.email });
+        res.json({token: jwtToken, email: user.email,  id: user._id  });
     } catch (error) {
         console.log({error});
         res.status(500).json({error});
