@@ -28,7 +28,7 @@ router.post('/signup', async (req, res) => {
         }); 
 
        res.cookie('p_chat_refresh', refreshToken, COOKIE_OPTIONS);
-       res.status(201).json({ token: jwtToken, email: user.email, id: user._id  });
+       res.status(201).json({ token: jwtToken, email: user.email, id: user._id, name: user.username });
    } catch (error) {
        res.status(500).json({error});
    }
@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
          }); 
  
         res.cookie('p_chat_refresh', refreshToken, COOKIE_OPTIONS);
-        res.status(201).json({ token: jwtToken, email: user.email, id: user._id  });
+        res.status(201).json({ token: jwtToken, email: user.email, id: user._id, name: user.username  });
     } catch (error) {
         if(error.message){
             error = error.message;
@@ -75,7 +75,7 @@ router.post('/logout', requireAuth , async (req, res) => {
            );
     
            res.cookie("p_chat_refresh", '',{ ...COOKIE_OPTIONS, maxAge: 1});
-           res.json({ token: '' , email : user.email, id: user._id })
+           res.json({ token: '' , email : user.email, id: user._id,  name: user.username  })
         }else{
             console.log('error')
             return res.status(401).json({message: "Invalid Token"});
@@ -112,7 +112,7 @@ router.post('/refresh', async (req, res) => {
         await user.save(); // Saving the user with updated refreshToken
 
         res.cookie('p_chat_refresh', newRefreshToken, COOKIE_OPTIONS);
-        res.json({token: jwtToken, email: user.email,  id: user._id  });
+        res.json({token: jwtToken, email: user.email,  id: user._id,  name: user.username  });
     } catch (error) {
         console.log({error});
         res.status(500).json({error});

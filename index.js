@@ -6,6 +6,7 @@ const { connectDB } = require('./middlewares/connectDB');
 const authRoutes =  require('./routes/auth');
 const userRoutes = require('./routes/user');
 const channelRoutes = require('./routes/channel');
+const messageRoutes = require('./routes/message');
 const cookieParser = require('cookie-parser');
 const startSocket = require('./socket/main');
 const app = express();
@@ -65,6 +66,7 @@ app.get('/', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/channel', channelRoutes);
+app.use('/message', messageRoutes);
 
 
 server.listen(PORT, () => console.log(`Server up at http://localhost:${PORT}`));

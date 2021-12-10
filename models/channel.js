@@ -11,8 +11,8 @@ const ChannelSchema = Schema({
         type: Array,
         required: true
     },
-    titles: {
-        type: Array,
+    title: {
+        type: String,
         required: true
     }
 });
