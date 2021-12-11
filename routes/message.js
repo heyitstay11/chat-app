@@ -11,12 +11,13 @@ const clean = (dirty) => sanitizeHtml(dirty, {
 });
 
 router.post('/', requireAuth, async (req, res) => {
-    const {channelId, sender, text} = req.body;
+    const {channelId, sender, text, msg_id} = req.body;
     try {
         let message = await Message.create({
             channel_id: channelId, 
-            sender, 
-            sender_id: req.user.id, 
+            sender,
+            msg_id,
+            sender_id: req.user.id,
             text: emojify(clean(text)) 
         });
         res.json({message});

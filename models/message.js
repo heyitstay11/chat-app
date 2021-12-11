@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { nanoid } = require('nanoid');
 const Schema = mongoose.Schema;
 
 
@@ -22,7 +21,7 @@ const MessageSchema = Schema({
     },
     msg_id: {
         type: String,
-        default: `socky-${nanoid(12)}`,
+        required: true,
     }
 })
 

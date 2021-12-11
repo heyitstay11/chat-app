@@ -54,7 +54,7 @@ const startSocket = (io) => {
         socket.on('sendDelete', ({id, room}, callback) => {
             io.to(room).emit('deleteMessage', {id});
             callback();
-        })
+        });
 
         socket.on('disconnect', () => {
             let user = removeUser(socket.id);
@@ -62,7 +62,25 @@ const startSocket = (io) => {
                 io.to(user.room).emit("message", {user: 'admin', text: `${user.name} has left the room`});
                 io.to(user.room).emit('pInfo', {users: getUserInRoom(user.room)});
             }
+        });
+
+        socket.on('p-join', ({id}, callback) => {
+            socket.join(id);
+            callback();
+        });
+
+        socket.on('p-leave', ({id}, callback) => {
+            socket.leave(id);
+            callback()
         })
+
+        socket.on('p-newMessage', ({roomId, sender, text, msg_id}, callback) => {
+            const userroom = roomId;
+            const message = emojify(clean(text));
+            io.to(userroom).emit("p-message", {sender, text: message, msg_id});
+            callback();
+        });
+
     });
 }
 
