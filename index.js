@@ -34,7 +34,7 @@ const whitelist = process.env.WHITELISTED_DOMAINS
 const corsOptions = {
     origin: function (origin, callback) {
         if (whitelist.indexOf(origin) !== -1 || !origin) {
-            callback(null, {origin: true})
+            callback(null, {origin: origin})
         } else {
             callback(new Error('Not allowed by CORS'))
         }
