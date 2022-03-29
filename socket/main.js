@@ -64,21 +64,39 @@ const startSocket = (io) => {
             }
         });
 
-        socket.on('p-join', ({id}, callback) => {
+        socket.on('p-join', ({id, user}, callback) => {
             socket.join(id);
+            socket.broadcast.to(id).emit('is-online', {user});
             callback();
         });
 
         socket.on('p-leave', ({id}, callback) => {
             socket.leave(id);
             callback()
-        })
+        });
 
         socket.on('p-newMessage', ({roomId, sender, text, msg_id}, callback) => {
             const userroom = roomId;
             const message = emojify(clean(text));
             io.to(userroom).emit("p-message", {sender, text: message, msg_id});
             callback();
+        });
+
+        socket.on('ack', ({id, user}) => {
+            console.log('ack', user);
+            socket.broadcast.to(id).emit('is-online-ack', {user});
+        })
+
+        socket.on('call-user', ({id, signalData, sender}) => {
+            console.log(sender, 'calling');
+            socket.broadcast.to(id).emit('call-user', {signal: signalData, sender, senderId: socket.id});
+        });
+
+        socket.on('answer-call', ({id, signal, senderId}) => {
+            console.log(id, 'accept', senderId);
+            socket.broadcast.to(senderId).emit('call-accepted', {signal});
+            socket.to(senderId).emit('hello', {id});
+            
         });
 
     });
