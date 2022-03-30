@@ -72,7 +72,8 @@ const startSocket = (io) => {
 
         socket.on('p-leave', ({id}, callback) => {
             socket.leave(id);
-            callback()
+            socket.broadcast.to(id).emit('call-ended', {id});
+            callback();
         });
 
         socket.on('p-newMessage', ({roomId, sender, text, msg_id}, callback) => {
